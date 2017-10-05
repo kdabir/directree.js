@@ -1,0 +1,8 @@
+node_modules
+.idea
+*.iml
+coverage/
+*.log
+*~
+.DS_Store
+example/out

@@ -1,0 +1,26 @@
+{
+  "name": "directree.js",
+  "version": "0.0.1",
+  "description": "Create directory trees with files and content",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kdabir/directree.js.git"
+  },
+  "author": "kdabir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kdabir/directree.js/issues"
+  },
+  "homepage": "https://github.com/kdabir/directree.js#readme",
+  "devDependencies": {
+    "jest": "^21.2.1",
+    "mock-fs": "^4.4.1"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  }
+}
