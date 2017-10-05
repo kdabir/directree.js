@@ -3,6 +3,11 @@
 Create directory trees with files and content
 
 
+## Install
+
+`npm install directree.js`
+
+
 ## Usage
 
 
