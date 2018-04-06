@@ -16,7 +16,10 @@ beforeEach(() => {
       'existing.file': 'original content',
       'some-dir': {}
     },
-    'a/new/root': {}
+    'a/new/root': {},
+    'some/path/to/dir': { 'file': 'content'},
+    'some/path/to/file': 'content',
+    'empty-dir': {},
   });
 });
 
@@ -27,6 +30,13 @@ it('should setup the existing dir structure', () => {
   expect(contentsOf('root/existing.file')).toEqual('original content')
   expect(childrenOf('root')).toEqual(['existing.file', 'some-dir'])
   expect(childrenOf('root/some-dir')).toEqual([])
+
+  expect(isDir('some/path/to/dir')).toBe(true);
+  expect(isFile('some/path/to/dir/file')).toBe(true);
+  expect(contentsOf('some/path/to/dir/file')).toBe('content');
+  expect(isFile('some/path/to/file')).toBe(true);
+  expect(contentsOf('some/path/to/file')).toBe('content');
+
 });
 
 
