@@ -1,16 +1,17 @@
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const join = require('path').join;
+const fs = require('fs')
+  , mkdirp = require('mkdirp')
+  , {dirname, join} = require('path')
+;
 
 const directree = (tree, root = ".") => {
-  mkdirp(root);
+  mkdirp.sync(root);
   if (typeof tree === 'object') {
     Object.entries(tree).forEach(([name, value]) => {
       const path = join(root, name);
       if (typeof value === 'string' && !fs.existsSync(path)) {
+        mkdirp.sync(dirname(path)); // for non existent paths as keys
         fs.writeFileSync(path, value);
-      }
-      if (typeof value === 'object') {
+      } else if (typeof value === 'object') {
         directree(value, path)
       }
     })

@@ -16,53 +16,61 @@ beforeEach(() => {
       'existing.file': 'original content',
       'some-dir': {}
     },
-    'a/new/root': {},
-    'some/path/to/dir': { 'file': 'content'},
-    'some/path/to/file': 'content',
-    'empty-dir': {},
+    'a/new/root': {}
   });
 });
 
-afterEach(() => mockfs.restore()); // func reference
+afterEach(mockfs.restore); // func reference
 
-it('should setup the existing dir structure', () => {
+it('mock should setup dir structure', () => {
   expect(isDir('root')).toBe(true)
+  expect(isDir('a/new/root')).toBe(true)
   expect(contentsOf('root/existing.file')).toEqual('original content')
   expect(childrenOf('root')).toEqual(['existing.file', 'some-dir'])
   expect(childrenOf('root/some-dir')).toEqual([])
 
-  expect(isDir('some/path/to/dir')).toBe(true);
-  expect(isFile('some/path/to/dir/file')).toBe(true);
-  expect(contentsOf('some/path/to/dir/file')).toBe('content');
-  expect(isFile('some/path/to/file')).toBe(true);
-  expect(contentsOf('some/path/to/file')).toBe('content');
-
 });
 
 
-it("should be able to specify root dir", () => {
-  directree({
-    'new.file': 'original content',
-    'some-dir': {
-      'empty.file':'',
-      'nested-dir':{}
-    },
-    'empty-dir': {},
+describe("directree on blank dir", () => {
 
-  }, "./a/new/root");
+  it("should be able to specify root dir", () => {
+    directree({
+      'new.file': 'original content',
+      'some-dir': {
+        'empty.file': '',
+        'nested-dir': {}
+      },
+      'empty-dir': {},
 
-  expect(isDir('a/new/root')).toBe(true);
-  expect(isFile('a/new/root/new.file')).toBe(true);
-  expect(isDir('a/new/root/some-dir')).toBe(true);
-  expect(isEmptyFile('a/new/root/some-dir/empty.file')).toBe(true);
-  expect(isDir('a/new/root/some-dir/nested-dir')).toBe(true);
-  expect(childrenOf('a/new/root/some-dir/nested-dir')).toEqual([]);
-  expect(childrenOf('a/new/root/empty-dir')).toEqual([]);
+    }, "a/new/root");
+
+    expect(isDir('a/new/root')).toBe(true);
+    expect(isFile('a/new/root/new.file')).toBe(true);
+    expect(isDir('a/new/root/some-dir')).toBe(true);
+    expect(isEmptyFile('a/new/root/some-dir/empty.file')).toBe(true);
+    expect(isDir('a/new/root/some-dir/nested-dir')).toBe(true);
+    expect(childrenOf('a/new/root/some-dir/nested-dir')).toEqual([]);
+    expect(childrenOf('a/new/root/empty-dir')).toEqual([]);
+
+  });
+
+  it("can specify path at top level", () => {
+    directree({
+      'some/path/to/dir': {'file': 'content'},
+      'some/path/to/file': 'text'
+    });
+
+    expect(isDir('some/path/to/dir')).toBe(true);
+    expect(isFile('some/path/to/dir/file')).toBe(true);
+    expect(contentsOf('some/path/to/dir/file')).toBe('content');
+    expect(isFile('some/path/to/file')).toBe(true);
+    expect(contentsOf('some/path/to/file')).toBe('text');
+  });
 
 });
 
-
-describe("directree merges well with existing tree", () => {
+describe("merging directree on existing tree", () => {
 
   beforeEach(() => {
     directree({
@@ -81,7 +89,7 @@ describe("directree merges well with existing tree", () => {
     expect(contentsOf('root/existing.file')).toEqual('original content');
   });
 
-  it("should still write new files", () => {
+  it("should write only new files", () => {
     expect(isFile('root/new.file')).toBe(true);
     expect(isFile('root/existing.file')).toBe(true);
     expect(contentsOf('root/new.file')).toEqual('new content');
