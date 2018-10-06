@@ -2,7 +2,7 @@
 
 Create directory trees with files and content
 
-[![Build Status](https://travis-ci.org/kdabir/directree.js.svg?branch=master)](https://travis-ci.org/kdabir/directree.js)
+[![Build Status](https://travis-ci.org/kdabir/directree.js.svg?branch=master)](https://travis-ci.org/kdabir/directree.js) [![Greenkeeper badge](https://badges.greenkeeper.io/kdabir/directree.js.svg)](https://greenkeeper.io/)
 
 ## Install
 
