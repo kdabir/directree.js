@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/kdabir/directree.js#readme",
   "devDependencies": {
-    "jest": "^21.2.1",
+    "jest": "^23.6.0",
     "mock-fs": "^4.6.0"
   },
   "dependencies": {
