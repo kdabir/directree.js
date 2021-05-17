@@ -97,3 +97,16 @@ describe("merging directree on existing tree", () => {
 
 });
 
+describe("merge with overwrite flag", () => {
+
+  it("should overwrite existing file", () => {
+    directree({
+      'root': {
+        'existing.file': 'overwritten content',
+      }
+    }, {overwrite: true});
+
+    expect(contentsOf('root/existing.file')).toEqual('overwritten content');
+  });
+
+})
