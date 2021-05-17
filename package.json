@@ -2,6 +2,9 @@
   "name": "directree.js",
   "version": "0.1.2",
   "description": "Create directory trees with files and content",
+  "files": [
+    "index.js"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "jest"
