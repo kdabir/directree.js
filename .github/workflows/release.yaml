@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+  id-token: write   # required for npm Trusted Publishing (OIDC) - no NPM_TOKEN secret needed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+      - name: Verify tag matches package.json version
+        run: |
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$PKG_VERSION" != "${{ github.ref_name }}" ]; then
+            echo "Tag ${{ github.ref_name }} does not match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+
+      # Trusted Publishing needs a recent npm CLI (>=11.5); the one bundled
+      # with actions/setup-node's Node 22 may lag behind, so pin it here.
+      - run: npm install -g npm@latest
+
+      # A plain `npm publish` always tags the published version `latest`,
+      # even for a prerelease (e.g. 1.0.0-beta.0) - so derive the dist-tag
+      # from the version string instead of relying on npm's default: a
+      # prerelease identifier (the part after the first '-', up to the next
+      # '.') becomes the npm tag; a plain x.y.z version stays 'latest'.
+      - name: Determine npm dist-tag
+        id: npm-tag
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [[ "$VERSION" == *-* ]]; then
+            TAG="${VERSION#*-}"
+            TAG="${TAG%%.*}"
+          else
+            TAG="latest"
+          fi
+          echo "Publishing $VERSION under npm dist-tag: $TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      # prepublishOnly (package.json) runs the build automatically.
+      - run: npm publish --provenance --tag ${{ steps.npm-tag.outputs.tag }}

@@ -1,10 +1,19 @@
-const directree = require('directree.js')
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import directree, {text, js} from '../dist/index.js'
 
-directree({
-  '.gitignore': 'node_modules',
+
+// run `pnpm run build` first, then `node example/simple.js`
+
+const outDir = join(dirname(fileURLToPath(import.meta.url)), 'out')
+
+const plan = directree({
+  '.gitignore': text`node_modules`,
   'README.md': '# my project',
-  'index.js': 'module.exports = () => "hello"',
+  'index.js': js`export default () => "hello"`,
   'spec': {
-    'index.spec.js':'const hello = require("../index");',
+    'index.spec.js': 'import hello from "../index.js";',
   },
-}, "out");
+}, outDir)
+
+console.log(plan)
