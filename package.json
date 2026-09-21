@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/kdabir/directree.js#readme",
   "devDependencies": {
-    "@types/node": "^22.20.2",
+    "@types/node": "^26.6.1",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"
   }
